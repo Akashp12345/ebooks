@@ -3,6 +3,7 @@ import { Avatar } from "antd";
 import "./styles/navbar.css";
 import { IoBookOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
+import { isAuthenticated } from "../utils/auth";
 const Navbar = () => {
   return (
     <nav id="navbar">
@@ -13,10 +14,12 @@ const Navbar = () => {
       </div>
       {/* Left side menu and profile */}
       <div className="right_nav_side">
-            {/* Navbar menu */}
+{isAuthenticated() ?<>   {/* Navbar menu */}
         <span className="nav_menu">Favourite</span>
         {/* Profile */}
-        <Avatar icon={<FaUser/>}>Hello</Avatar>
+        <Avatar icon={<FaUser/>}>Hello</Avatar></>:<><button>Sign UP</button></>}
+            
+         
       </div>
     </nav>
   );
