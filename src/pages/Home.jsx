@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useState, useRef } from "react";
 import "./styles/home.css";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
-import { Dropdown, Input, Select, Skeleton, Pagination,message } from "antd";
+import { Dropdown, Input, Select, Skeleton, Pagination, message } from "antd";
 import { IoMdArrowDropdown } from "react-icons/io";
 const { Search } = Input;
 const Home = () => {
@@ -14,7 +14,7 @@ const Home = () => {
   const [params, setParams] = useSearchParams();
 
   const fetcher = useCallback(async (query, page) => {
-    try{
+    try {
       const search = query || params.get("search");
       const pageno = page || Number(params.get("page"));
       setLoading(true);
@@ -23,20 +23,15 @@ const Home = () => {
           search || "*"
         }&pageNumber=${pageno || 1}`
       );
-    
+
       setLoading(false);
       if (response.status === 200) {
         setBooksData(response.data.books);
         setTotalPages(response.data.totalpages);
       }
-     
+    } catch (err) {
+      console.log(err.response.data);
     }
-    catch(err){
-  
-        console.log(err.response.data)
-       
-    }
-   
   }, []);
 
   useEffect(() => {
