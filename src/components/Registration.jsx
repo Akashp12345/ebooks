@@ -104,14 +104,11 @@ const Registration = () => {
         message.warning({ content: warningMessage });
         return;
       }
-
       let obj = {
         email,
         password,
       };
-
       let response = await postrequest("/user/signin", obj);
-
       const token = response.headers
         .get("Authorization")
         .replace("Bearer ", "");

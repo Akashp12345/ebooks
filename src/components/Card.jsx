@@ -1,13 +1,21 @@
 import React from "react";
 import { Skeleton, message } from "antd";
 import "./styles/card.css";
-import axios from "axios";
 import { isAuthenticated } from "../utils/auth";
 import { useDispatch } from "react-redux";
 import { enableLogin } from "../utils/store/reducer";
 import { FaRegHeart, FaHeart, FaCheck, FaCheckDouble } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { postrequest } from "../services/requesthandler";
+import  {jwtDecode} from "jwt-decode"
+
+
+let decode=""
+if(sessionStorage.getItem("token")){
+  let token=sessionStorage.getItem("token")
+decode=jwtDecode(token)
+
+}
 const Card = ({ loading, booksdata ,fetcher}) => {
   const dispatch = useDispatch();
   const AddToFavourite = async (book) => {
@@ -16,7 +24,7 @@ const Card = ({ loading, booksdata ,fetcher}) => {
         dispatch(enableLogin(true));
         return;
       }
-      await postrequest(`/books/favourite/8cb7097d-67d1-48aa-88dc-f648264f69f2`,book)
+      await postrequest(`/books/favourite/${decode?.userid}`,book)
       fetcher()
     } catch (err) {
       console.log(err.message);
@@ -30,7 +38,7 @@ const Card = ({ loading, booksdata ,fetcher}) => {
         return;
       }
 
-      await postrequest(`/books/markasread/8cb7097d-67d1-48aa-88dc-f648264f69f2`,book)
+      await postrequest(`/books/markasread/${decode?.userid}`,book)
       fetcher()
       message.success({
 

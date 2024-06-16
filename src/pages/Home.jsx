@@ -1,16 +1,8 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
 import "./styles/home.css";
-import axios from "axios";
 import { useSearchParams } from "react-router-dom";
-import {
-  Dropdown,
-  Input,
-  Select,
-  Skeleton,
-  Pagination,
-  message,
-  Result,
-} from "antd";
+import { Dropdown, Input, Select, Pagination, message, Result } from "antd";
+import { jwtDecode } from "jwt-decode";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Card from "../components/Card";
 import { getrequest } from "../services/requesthandler";
@@ -19,30 +11,38 @@ const Home = () => {
   const timeId = useRef(null);
   const [totalPages, setTotalPages] = useState(0);
   const [booksdata, setBooksData] = useState([]);
+  const [recommended, setRecommended] = useState([]);
   const [searching, setSearching] = useState(false);
   const [loading, setLoading] = useState(true);
   const [params, setParams] = useSearchParams();
 
   const fetcher = useCallback(async (query, page) => {
     try {
+      let decode = "";
+      if (sessionStorage.getItem("token")) {
+        let token = sessionStorage.getItem("token");
+        decode = jwtDecode(token);
+      }
+
       const search = query || params.get("search");
       const pageno = page || Number(params.get("page"));
 
       let response = await getrequest(
-        `/books/searchbooks/8cb7097d-67d1-48aa-88dc-f648264f69f2?search=${
+        `/books/searchbooks/${decode?.userid}?search=${
           search || "*"
         }&pageNumber=${pageno || 1}`
       );
 
       setLoading(false);
       if (response.status === 200) {
+        setRecommended(response?.data?.recommended);
         setBooksData(response.data.books);
         setTotalPages(response.data.totalpages);
       }
     } catch (err) {
       setLoading(false);
 
-      console.log(err.response.data);
+      console.log(err);
     }
   }, []);
 
@@ -117,30 +117,6 @@ const Home = () => {
               }}
             />
           </div>
-          <div>
-            {" "}
-            <span>
-              <label className="search_title">Authors :</label>
-              <Select
-                size="small"
-                variant="borderless"
-                style={{ width: "150px" }}
-                placeholder="Authors"
-                options={[{ label: "one", value: "one" }]}
-              />
-            </span>
-            <span>
-              <label className="search_title">Category :</label>
-              <Select
-                size="small"
-                variant="borderless"
-                style={{ width: "150px" }}
-                allowClear
-                placeholder="Category"
-                options={[{ label: "one", value: "one" }]}
-              />
-            </span>
-          </div>
         </section>
 
         <span>
@@ -165,6 +141,16 @@ const Home = () => {
           </Dropdown>
         </span>
       </section>
+
+      {/* Recommended books */}
+      {recommended.length > 0 && (
+        <section id="book_render">
+          <label className="books_heading">Recommended Books</label>
+
+          <Card loading={loading} booksdata={recommended} fetcher={fetcher} />
+        </section>
+      )}
+
       {/* Render books */}
       <section id="book_render">
         <label className="books_heading">All Books</label>
@@ -178,7 +164,7 @@ const Home = () => {
         )}
         <Card loading={loading} booksdata={booksdata} fetcher={fetcher} />
       </section>
-      <center>
+      <center style={{ marginBottom: "20px" }}>
         {" "}
         <Pagination
           current={params.get("page") || 1}
