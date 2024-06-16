@@ -10,9 +10,12 @@
   /* flex: 1 1 calc(12.333% - 32px); */
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+background-color:aliceblue;
+border-radius: 10px;
+  justify-content: flex-end;
   align-items: center;
-
+ padding: 5px 0;
   width: 190px;
   height: auto;
   min-height: 240px;
@@ -21,6 +24,31 @@
 
   transition: 0.5s ease-out;
   overflow: visible;
+}
+
+.book_title{
+  font-size: 15px;
+  font-family: "Roboto",'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 400;
+}
+
+#card_details{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.card_description{
+  width: 90%;
+  margin: auto;
+}
+
+.book_authors{
+  font-size: 13px;
+  font-family: "Roboto",'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-weight: 400;
+  
 }
 
 .book_image {
@@ -32,9 +60,10 @@
   transform: translate(-50%, 125%);
   width: 80%;
   border-radius: 1rem;
-  border: none;
-  background-color: #008bf8;
-  color: #fff;
+
+  background-color: rgba(255,255,255,1);
+  border: 0.1rem solid #e3e8e8;
+  color: black;
   font-size: 1rem;
   padding: 0.5rem 1rem;
   position: absolute;
@@ -42,22 +71,12 @@
   bottom: 10px;
   opacity: 0;
   transition: 0.3s ease-out;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
 
-.details {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.5);
-  color: black;
-  padding: 10px;
-  border-radius: 5px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  cursor: pointer;
-}
 
 .book_card:hover .card-button {
   transform: translate(-50%, 50%);
@@ -67,10 +86,3 @@
   cursor: pointer;
 }
 
-.book_card:hover .details {
-  opacity: 1;
-}
-
-.book_card:hover .book_image {
-  filter: blur(5px);
-}

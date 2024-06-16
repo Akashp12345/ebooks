@@ -13,22 +13,23 @@ import {
 } from "antd";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Card from "../components/Card";
+import { getrequest } from "../services/requesthandler";
 const { Search } = Input;
 const Home = () => {
   const timeId = useRef(null);
   const [totalPages, setTotalPages] = useState(0);
   const [booksdata, setBooksData] = useState([]);
   const [searching, setSearching] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [params, setParams] = useSearchParams();
 
   const fetcher = useCallback(async (query, page) => {
     try {
       const search = query || params.get("search");
       const pageno = page || Number(params.get("page"));
-      setLoading(true);
-      let response = await axios.get(
-        `http://127.0.0.1:5003/api/v1/books/searchbooks/null?search=${
+
+      let response = await getrequest(
+        `/books/searchbooks/8cb7097d-67d1-48aa-88dc-f648264f69f2?search=${
           search || "*"
         }&pageNumber=${pageno || 1}`
       );
@@ -40,6 +41,7 @@ const Home = () => {
       }
     } catch (err) {
       setLoading(false);
+
       console.log(err.response.data);
     }
   }, []);
@@ -167,15 +169,14 @@ const Home = () => {
       <section id="book_render">
         <label className="books_heading">All Books</label>
         {!loading && booksdata.length === 0 && (
-            <center>
-              <Result
-                status="404"
-             
-                subTitle="Sorry,no books available for read."
-              />
-            </center>
-          )}
-      <Card loading={loading} booksdata={booksdata}/>
+          <center>
+            <Result
+              status="404"
+              subTitle="Sorry,no books available for read."
+            />
+          </center>
+        )}
+        <Card loading={loading} booksdata={booksdata} fetcher={fetcher} />
       </section>
       <center>
         {" "}

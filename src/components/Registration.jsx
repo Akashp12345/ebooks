@@ -6,6 +6,7 @@ import "./styles/registration.css";
 import { MdAlternateEmail, MdLockOutline } from "react-icons/md";
 import { FaEye, FaEyeSlash, FaRegUser } from "react-icons/fa";
 import axios from "axios";
+import { postrequest } from "../services/requesthandler";
 const Registration = () => {
   const { login } = useSelector((state) => state.bookstore);
   const dispatch = useDispatch();
@@ -66,10 +67,7 @@ const Registration = () => {
         password,
       };
 
-      let response = await axios.post(
-        "http://127.0.0.1:5002/api/v1/user/register",
-        obj
-      );
+      let response = await postrequest("/user/register", obj);
 
       const token = response.headers
         .get("Authorization")
@@ -79,7 +77,7 @@ const Registration = () => {
       message.success({
         content: response?.data?.message,
       });
-      dispatch(enableLogin(false))
+      dispatch(enableLogin(false));
     } catch (err) {
       message.warning({
         content: err?.response?.data?.error,
@@ -112,10 +110,7 @@ const Registration = () => {
         password,
       };
 
-      let response = await axios.post(
-        "http://127.0.0.1:5002/api/v1/user/signin",
-        obj
-      );
+      let response = await postrequest("/user/signin", obj);
 
       const token = response.headers
         .get("Authorization")
@@ -125,7 +120,7 @@ const Registration = () => {
       message.success({
         content: response?.data?.message,
       });
-      dispatch(enableLogin(false))
+      dispatch(enableLogin(false));
     } catch (err) {
       message.warning({
         content: err?.response?.data?.error,
