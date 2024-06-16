@@ -2,8 +2,17 @@ import React, { useEffect, useCallback, useState, useRef } from "react";
 import "./styles/home.css";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
-import { Dropdown, Input, Select, Skeleton, Pagination, message } from "antd";
+import {
+  Dropdown,
+  Input,
+  Select,
+  Skeleton,
+  Pagination,
+  message,
+  Result,
+} from "antd";
 import { IoMdArrowDropdown } from "react-icons/io";
+import Card from "../components/Card";
 const { Search } = Input;
 const Home = () => {
   const timeId = useRef(null);
@@ -19,7 +28,7 @@ const Home = () => {
       const pageno = page || Number(params.get("page"));
       setLoading(true);
       let response = await axios.get(
-        `http://127.0.0.1:5002/api/v1/books/searchbooks/null?search=${
+        `http://127.0.0.1:5003/api/v1/books/searchbooks/null?search=${
           search || "*"
         }&pageNumber=${pageno || 1}`
       );
@@ -30,6 +39,7 @@ const Home = () => {
         setTotalPages(response.data.totalpages);
       }
     } catch (err) {
+      setLoading(false);
       console.log(err.response.data);
     }
   }, []);
@@ -156,32 +166,16 @@ const Home = () => {
       {/* Render books */}
       <section id="book_render">
         <label className="books_heading">All Books</label>
-        <div className="books_renderer">
-          {loading
-            ? new Array(16).fill(null).map((_, index) => (
-                <div className="book_card" key={index}>
-                  <Skeleton
-                    className="book_image"
-                    style={{ objectFit: "contain", height: "210px" }}
-                  ></Skeleton>
-                </div>
-              ))
-            : booksdata.map((book) => (
-                <div className="book_card" key={book?.id}>
-                  <img
-                    className="book_image"
-                    style={{ objectFit: "contain" }}
-                    width={150}
-                    src={book?.thumbnail}
-                    alt={book?.title}
-                  />
-                  <div className="details">
-                    <label>{book.title}</label>
-                  </div>
-                  <button className="card-button">Favourite</button>
-                </div>
-              ))}
-        </div>
+        {!loading && booksdata.length === 0 && (
+            <center>
+              <Result
+                status="404"
+             
+                subTitle="Sorry,no books available for read."
+              />
+            </center>
+          )}
+      <Card loading={loading} booksdata={booksdata}/>
       </section>
       <center>
         {" "}

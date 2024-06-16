@@ -3,12 +3,15 @@ import NavBar from "../components/Navbar";
 import Home from "../pages/Home";
 import ErrorElement from "../components/ErrorElement";
 import ProtectedRoute from "../components/ProtectedRoute";
+import Registration from "../components/Registration";
+import Favourite from "../pages/Favourite";
 
 // Defined routes
 const RouteWrapper = () => {
   return (
     <>
       <NavBar />
+      <Registration/>
       <Outlet />
     </>
   );
@@ -27,7 +30,7 @@ const routes = createBrowserRouter([
       {
         path:"/favourite",
         element:<ProtectedRoute>
-          <label>Hello</label>
+         <Favourite/>
         </ProtectedRoute>
       }
     ],
