@@ -14,11 +14,11 @@ This is Book Store application built using React. It allows user to read the boo
 
 ## Website link
 
-[Website Link](https://techdome.akash-patil.info)
+[Website Link](https://books.akash-patil.info)
 
 ## Book API
   
-We used [Google Book API](https://developers.google.com/books/docs/overview)
+Used [Google Book API](https://developers.google.com/books/docs/overview)
 
 ## Folder Structure
 
@@ -87,7 +87,7 @@ We used [Google Book API](https://developers.google.com/books/docs/overview)
 
 ## Testing
 
-We used jest and supertest library for testing pages.
+Used jest and supertest library for testing pages.
 
 - Test Command
   ```bash
