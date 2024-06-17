@@ -102,3 +102,14 @@
   font-size: 14px;
   margin: 5px 0;
 }
+
+
+@media (max-width:480px) {
+  .form{
+    width: 100%;
+    padding: 0;
+  }
+  .inputForm{
+    height: 40px;
+  }
+}

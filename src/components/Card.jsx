@@ -1,5 +1,5 @@
 import React from "react";
-import { Skeleton, message } from "antd";
+import { Skeleton, message, Typography } from "antd";
 import { isAuthenticated } from "../utils/auth";
 import { useDispatch } from "react-redux";
 import { enableLogin } from "../utils/store/reducer";
@@ -10,6 +10,7 @@ import { FaRegHeart, FaHeart, FaCheck } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
 // Styles
 import "./styles/card.css";
+const { Text } = Typography;
 
 const Card = ({ loading, booksdata, fetcher }) => {
   const dispatch = useDispatch();
@@ -92,11 +93,25 @@ const Card = ({ loading, booksdata, fetcher }) => {
                 />
                 <div className="card_description">
                   {/* Book Title */}
-                  <span className="book_title">{book?.title}</span> <br />
+                  <span className="book_title">
+                    <Text
+                      style={{ width: "150px" }}
+                      className="book_title"
+                      ellipsis={{ tooltip: book?.title }}
+                    >
+                      {book?.title}
+                    </Text>
+                  </span>{" "}
+                  <br />
                   {/* Book Authors */}
-                  <span className="book_authors">
-                    {book?.authors && book?.authors.join(",")}
-                  </span>
+                  <div className="book_authors">
+                    <Text
+                      style={{ width: "150px" }}
+                      ellipsis={{ tooltip: book?.authors?.join(",") }}
+                    >
+                      {book?.authors && book?.authors.join(",")}
+                    </Text>
+                  </div>
                 </div>
               </div>
               {/* Add to favourite and mark as read button */}

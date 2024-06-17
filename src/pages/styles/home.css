@@ -24,7 +24,7 @@
 /* book container */
 #book_render {
   width: 90%;
-  margin: 10px auto;
+  margin: 20px auto;
 }
 
 /* heading */
@@ -39,5 +39,16 @@
   }
   .book_card{
     width:250px;
+  }
+
+#search_filter_left{
+  width: 100%;
+}
+
+  .search_input{
+    width:280px;
+  }
+  #search_filter_home{
+    margin-top: 20px;
   }
 }

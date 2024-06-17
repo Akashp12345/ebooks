@@ -42,23 +42,55 @@
   font-weight: 500;
 }
 
+.mobile_menu{
+  display: none;
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
   #navbar {
-    flex-direction: column;
-    padding: 10px 0;
-    width: 100%;
+    display: flex;
+     justify-content: space-between;
+    padding: 10px 15px;
+ 
+    
+    position: fixed;
+    top: 0;
   }
 
   .right_nav_side {
-    width: 100%;
-    justify-content: center;
-    margin-bottom: 10px;
+    
     display: none;
   }
 
+  .mobile_menu{
+    display: block;
+    width: 100%;
+  text-align: right;
+   
+  }
+
+  .mobile_nav{
+    position:absolute;
+    bottom:-36px;
+    background-color:lightgray;
+    width: 100%;
+    padding: 5px 15px;
+    left: 0;
+  }
+
+  .after_login{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .menu{
+    font-size: 30px;
+    cursor: pointer;
+  }
+
   .left_nav_side {
-    /* width: 150px; */
+    width: 350px;
     justify-content: space-around;
   }
 }
