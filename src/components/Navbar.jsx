@@ -1,15 +1,22 @@
 import React from "react";
-import { Avatar } from "antd";
+import { Avatar, Dropdown } from "antd";
 import "./styles/navbar.css";
 import { IoBookOutline } from "react-icons/io5";
 import { FaUser } from "react-icons/fa";
 import { isAuthenticated } from "../utils/auth";
-import { enableLogin } from "../utils/store/reducer";
+import { enableLogin, setloggedin } from "../utils/store/reducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isloggedin } = useSelector((state) => state.bookstore);
+
+  const logout = () => {
+    dispatch(setloggedin(false));
+    sessionStorage.removeItem("token");
+  };
+
   return (
     <nav id="navbar">
       {/* Right side logo and title */}
@@ -25,7 +32,7 @@ const Navbar = () => {
       </div>
       {/* Left side menu and profile */}
       <div className="right_nav_side">
-        {isAuthenticated() ? (
+        {isAuthenticated() || isloggedin ? (
           <>
             {" "}
             {/* Navbar menu */}
@@ -33,10 +40,25 @@ const Navbar = () => {
               Favourite
             </span>
             {/* Profile */}
-            <Avatar icon={<FaUser />}>Hello</Avatar>
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: 0,
+                    label: <label onClick={() => logout()}>Log Out</label>,
+                  },
+                ],
+              }}
+              placement="topRight"
+            >
+              <Avatar style={{ cursor: "pointer" }} icon={<FaUser />}>
+                Name
+              </Avatar>
+            </Dropdown>
           </>
         ) : (
           <>
+          {/* Signup option */}
             <label
               style={{ cursor: "pointer" }}
               onClick={() => dispatch(enableLogin(true))}

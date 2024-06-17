@@ -1,18 +1,17 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useState } from "react";
 import { Modal, message } from "antd";
-import { enableLogin } from "../utils/store/reducer";
+import { enableLogin, setloggedin } from "../utils/store/reducer";
 import "./styles/registration.css";
 import { MdAlternateEmail, MdLockOutline } from "react-icons/md";
 import { FaEye, FaEyeSlash, FaRegUser } from "react-icons/fa";
-import axios from "axios";
 import { postrequest } from "../services/requesthandler";
 const Registration = () => {
   const { login } = useSelector((state) => state.bookstore);
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [signup, setSignup] = useState(true);
+  const [show, setShow] = useState(false); //show or hide password
+  const [show1, setShow1] = useState(false); //show or hide confirm password
+  const [signup, setSignup] = useState(true); //Toggle for signin and signup
 
   //   Registration
   const Signup = async (event) => {
@@ -40,6 +39,7 @@ const Registration = () => {
       const passwordPattern =
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+      // Checking the data
       if (
         !fullname ||
         !email ||
@@ -67,7 +67,8 @@ const Registration = () => {
         password,
       };
 
-      let response = await postrequest("/user/register", obj);
+      // request for registration
+      let response = await postrequest("/api/v1/user/register", obj);
 
       const token = response.headers
         .get("Authorization")
@@ -77,7 +78,9 @@ const Registration = () => {
       message.success({
         content: response?.data?.message,
       });
+      // Changing login status
       dispatch(enableLogin(false));
+      dispatch(setloggedin(true));
     } catch (err) {
       message.warning({
         content: err?.response?.data?.error,
@@ -98,6 +101,7 @@ const Registration = () => {
         password: "Please enter password.",
       };
 
+      // Checking the data
       if (!email || !password) {
         const warningMessage = !email ? warnings.email : warnings.password;
 
@@ -108,7 +112,7 @@ const Registration = () => {
         email,
         password,
       };
-      let response = await postrequest("/user/signin", obj);
+      let response = await postrequest("/api/v1/user/signin", obj);
       const token = response.headers
         .get("Authorization")
         .replace("Bearer ", "");
@@ -117,6 +121,8 @@ const Registration = () => {
       message.success({
         content: response?.data?.message,
       });
+      // setting login status
+      dispatch(setloggedin(true));
       dispatch(enableLogin(false));
     } catch (err) {
       message.warning({
@@ -138,6 +144,7 @@ const Registration = () => {
         {signup && (
           <>
             {" "}
+            {/* Full Name */}
             <div className="flex-column">
               <label>Full Name </label>
             </div>
@@ -151,7 +158,7 @@ const Registration = () => {
             </div>
           </>
         )}
-
+        {/* Email */}
         <div className="flex-column">
           <label>Email </label>
         </div>
@@ -160,6 +167,7 @@ const Registration = () => {
           <input type="text" className="input" placeholder="Enter your Email" />
         </div>
 
+        {/* Password */}
         <div className="flex-column">
           <label>Password </label>
         </div>
@@ -178,7 +186,7 @@ const Registration = () => {
             )}
           </span>
         </div>
-
+        {/* Confirm Password */}
         {signup && (
           <>
             {" "}
@@ -203,12 +211,7 @@ const Registration = () => {
           </>
         )}
 
-        {!signup && (
-          <div className="flex-row">
-            <span className="span">Forgot password?</span>
-          </div>
-        )}
-
+        {/* Submit button */}
         <button className="button-submit">
           {signup ? "Sign Up" : "Sign In"}
         </button>

@@ -1,11 +1,11 @@
 import React, { useEffect, useCallback, useState, useRef } from "react";
-import "./styles/home.css";
+import { useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
-import { Dropdown, Input, Select, Pagination, message, Result } from "antd";
-import { jwtDecode } from "jwt-decode";
-import { IoMdArrowDropdown } from "react-icons/io";
+import { Input, Pagination, Result } from "antd";
+import { jwtDecode } from "jwt-decode";    //decode the token
 import Card from "../components/Card";
 import { getrequest } from "../services/requesthandler";
+import "./styles/home.css";
 const { Search } = Input;
 const Home = () => {
   const timeId = useRef(null);
@@ -15,7 +15,9 @@ const Home = () => {
   const [searching, setSearching] = useState(false);
   const [loading, setLoading] = useState(true);
   const [params, setParams] = useSearchParams();
+  const { isloggedin } = useSelector((state) => state.bookstore);
 
+  // Fetch all books
   const fetcher = useCallback(async (query, page) => {
     try {
       let decode = "";
@@ -28,7 +30,7 @@ const Home = () => {
       const pageno = page || Number(params.get("page"));
 
       let response = await getrequest(
-        `/books/searchbooks/${decode?.userid}?search=${
+        `/api/v1/books/searchbooks/${decode?.userid}?search=${
           search || "*"
         }&pageNumber=${pageno || 1}`
       );
@@ -41,14 +43,13 @@ const Home = () => {
       }
     } catch (err) {
       setLoading(false);
-
       console.log(err);
     }
   }, []);
 
   useEffect(() => {
     fetcher();
-  }, []);
+  }, [isloggedin]);
 
   // Debounce function
   const debounce = (func, delay) => {
@@ -94,6 +95,7 @@ const Home = () => {
     return originalElement;
   };
 
+  // handle page changes
   const HandlePages = (val) => {
     updateSearchParams({ page: val });
 
@@ -110,7 +112,7 @@ const Home = () => {
               loading={searching}
               defaultValue={params.get("search")}
               placeholder="Search by title, author or category"
-              style={{ width: "350px" }}
+              className="search_input"
               onChange={(e) => {
                 setSearching(true);
                 debouncedHandleInputChange(e.target.value);
@@ -118,28 +120,6 @@ const Home = () => {
             />
           </div>
         </section>
-
-        <span>
-          <Dropdown
-            menu={{
-              items: [
-                {
-                  key: 1,
-                  label: "Latest",
-                },
-                {
-                  key: 2,
-                  label: "Oldest",
-                },
-              ],
-            }}
-          >
-            <span className="sort_by">
-              <label className="search_title">sort by </label>{" "}
-              <IoMdArrowDropdown />
-            </span>
-          </Dropdown>
-        </span>
       </section>
 
       {/* Recommended books */}
@@ -164,6 +144,7 @@ const Home = () => {
         )}
         <Card loading={loading} booksdata={booksdata} fetcher={fetcher} />
       </section>
+      {/* pagination */}
       <center style={{ marginBottom: "20px" }}>
         {" "}
         <Pagination

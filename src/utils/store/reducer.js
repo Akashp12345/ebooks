@@ -1,16 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const bookSlice = createSlice({
-  name: 'todo',
+  name: 'book',
   initialState: {
-      login:false
+      login:false,
+      isloggedin:sessionStorage.getItem("token")?true:false
   },
   reducers: {
    enableLogin:(state,action)=>{
     state.login=action.payload
+   },
+   setloggedin:(state,action)=>{
+    state.isloggedin=action.payload
    }
   },
 });
 
-export const { enableLogin } = bookSlice.actions;
+export const { enableLogin,setloggedin} = bookSlice.actions;
 export default bookSlice.reducer;

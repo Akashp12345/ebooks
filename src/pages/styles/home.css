@@ -5,6 +5,10 @@
   width: 90%;
   margin: auto;
 }
+/* search input */
+.search_input{
+  width: 350px;
+}
 
 #search_filter_left {
   display: flex;
@@ -17,17 +21,23 @@
   cursor: pointer;
 }
 
-.sort_by {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
+/* book container */
 #book_render {
   width: 90%;
   margin: 10px auto;
 }
 
+/* heading */
 .books_heading {
   font-size: 18px;
+}
+
+@media (max-width:480px) {
+  .books_renderer{
+    flex-direction: column;
+    align-items: center;
+  }
+  .book_card{
+    width:250px;
+  }
 }

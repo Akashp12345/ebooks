@@ -1,55 +1,60 @@
 import React from "react";
 import { Skeleton, message } from "antd";
-import "./styles/card.css";
 import { isAuthenticated } from "../utils/auth";
 import { useDispatch } from "react-redux";
 import { enableLogin } from "../utils/store/reducer";
-import { FaRegHeart, FaHeart, FaCheck, FaCheckDouble } from "react-icons/fa";
-import { IoCheckmarkDoneOutline } from "react-icons/io5";
 import { postrequest } from "../services/requesthandler";
-import  {jwtDecode} from "jwt-decode"
+import { jwtDecode } from "jwt-decode";
+// icons
+import { FaRegHeart, FaHeart, FaCheck } from "react-icons/fa";
+import { IoCheckmarkDoneOutline } from "react-icons/io5";
+// Styles
+import "./styles/card.css";
 
-
-let decode=""
-if(sessionStorage.getItem("token")){
-  let token=sessionStorage.getItem("token")
-decode=jwtDecode(token)
-
-}
-const Card = ({ loading, booksdata ,fetcher}) => {
+const Card = ({ loading, booksdata, fetcher }) => {
   const dispatch = useDispatch();
+  let decode = "";
+  if (sessionStorage.getItem("token")) {
+    let token = sessionStorage.getItem("token");
+    decode = jwtDecode(token);
+  }
+
+  // Adding and removing from favourite
   const AddToFavourite = async (book) => {
     try {
+      // Checking is user logged in or not
       if (!isAuthenticated()) {
         dispatch(enableLogin(true));
         return;
       }
-      await postrequest(`/books/favourite/${decode?.userid}`,book)
-      fetcher()
+      await postrequest(`/api/v1/books/favourite/${decode?.userid}`, book);
+      fetcher();
     } catch (err) {
       console.log(err.message);
     }
   };
 
+  // Marking as read and unread
   const MarkasRead = async (book) => {
     try {
+      // Checking is user logged in or not
       if (!isAuthenticated()) {
         dispatch(enableLogin(true));
         return;
       }
 
-      await postrequest(`/books/markasread/${decode?.userid}`,book)
-      fetcher()
-      message.success({
-
-      })
+      await postrequest(`/api/v1/books/markasread/${decode?.userid}`, book);
+      fetcher();
+      message.success({});
     } catch (err) {
       console.log(err.message);
     }
   };
 
+  // Read the book
   const readBook = (link, e) => {
-    if(!isAuthenticated()){
+    // Checking is user logged in or not
+    if (!isAuthenticated()) {
       dispatch(enableLogin(true));
       return;
     }
@@ -60,7 +65,8 @@ const Card = ({ loading, booksdata ,fetcher}) => {
   return (
     <div className="books_renderer">
       {loading
-        ? new Array(12).fill(null).map((_, index) => (
+        ? // Initial loading
+          new Array(12).fill(null).map((_, index) => (
             <div className="book_card" key={index}>
               <Skeleton
                 className="book_image"
@@ -69,12 +75,14 @@ const Card = ({ loading, booksdata ,fetcher}) => {
             </div>
           ))
         : booksdata.length > 0 &&
+          // Cards rendering
           booksdata.map((book) => (
             <div className="book_card" key={book?.id}>
               <div
-                id="card_details"
+                className="card_details"
                 onClick={(e) => readBook(book?.previewLink, e)}
               >
+                {/* Card thumbnail */}
                 <img
                   className="book_image"
                   style={{ objectFit: "contain" }}
@@ -83,14 +91,15 @@ const Card = ({ loading, booksdata ,fetcher}) => {
                   alt={book?.title}
                 />
                 <div className="card_description">
-                  <span className="book_title">{book?.title}</span>
-                  <br />
+                  {/* Book Title */}
+                  <span className="book_title">{book?.title}</span> <br />
+                  {/* Book Authors */}
                   <span className="book_authors">
                     {book?.authors && book?.authors.join(",")}
                   </span>
                 </div>
               </div>
-
+              {/* Add to favourite and mark as read button */}
               <div className="card-button">
                 <span>
                   {!book?.favourite ? (
