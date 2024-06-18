@@ -16,6 +16,11 @@ This is Book Store application built using React. It allows user to read the boo
 
 [Website Link](https://books.akash-patil.info)
 
+## Test Credentials
+
+- Email : `test@example.com`
+- Password: `Test@12345`
+
 ## Book API
   
 Used [Google Book API](https://developers.google.com/books/docs/overview)
@@ -43,17 +48,13 @@ Used [Google Book API](https://developers.google.com/books/docs/overview)
 
 ## Packages Used
 
-- **axios**: A promise-based HTTP client for the browser and Node.js, used to fetch data from the Google Books API.
+- **axios**: A promise-based HTTP client for the browser and Node.js, used to send request to backend.
 - **dotenv**: A module that loads environment variables from a `.env` file into `process.env`, helping to manage configuration.
 - **antd**: Provides inbuilt UI components.
 - **react-icons**: For various icons.
 - **react-redux**: For managing the state with Redux.
 - **react-router-dom**: For managing routes in a React application.
 
-
-## Test Credentials
-- `Email` : akash@example.com
-- `Password`: password
 
 ## Installation <!-- Installation -->
 
@@ -78,21 +79,11 @@ Used [Google Book API](https://developers.google.com/books/docs/overview)
 
 ## Usage <!-- Usage -->
 
-1.  Start Server
+1.  start project
     ```bash
     npm run dev
     ```
 
-<!-- Testing Section -->
-
-## Testing
-
-Used jest and supertest library for testing pages.
-
-- Test Command
-  ```bash
-  npm test
-  ```
 
 ## Deployment
 
@@ -100,62 +91,20 @@ Used jest and supertest library for testing pages.
 
 - **AWS EC2**: Amazon Web Services Elastic Compute Cloud (EC2) is used to deploy the server.
 - **Nginx**: Nginx is a high-performance web server and reverse proxy server. It is used to serve the website, handle load balancing, and manage incoming HTTP requests efficiently.
-- **AWS CodePipeline**: AWS CodePipeline is a continuous integration and continuous delivery (CI/CD) service for fast and reliable application updates. It automates the build, test, and deploy phases of your release process, helping to streamline the deployment of your website.
-
-## AWS CodePipeline Stages
-
-### Overview
-
-AWS CodePipeline automates the build, test, and deployment phases of your release process every time there is a code change, based on the release model you define. Here are the stages typically involved in a CodePipeline setup for deploying a web application:
-
-### Stages
-
-1. **Source**
-2. **Build**
-3. **Deploy**
-
-### Stage Details
-
-#### 1. Source
-
-- **Description**: The source stage retrieves the source code for the application from a version control repository.
-- **Action Provider**: AWS CodeCommit.
-- **Example Configuration**:
-  - **Repository**: The repository containing the source code (e.g., `my-git-repo`).
-  - **Branch**: The branch to monitor for changes (e.g., `main` or `master`).
-  - **Output Artifact**: The output artifact is a ZIP file containing the source code, which is passed to the next stage.
 
 
-#### 2. Build
-- **Description**: The build stage compiles the source code, runs tests, and prepares artifacts for deployment.
-- **Action Provider**: AWS CodeBuild.
-- **Example Configuration**:
-  - **Build Project**: The CodeBuild project that defines the build environment and commands (e.g., `my-build-project`).
-  - **Build Specification**: A `buildspec.yml` file that defines the build steps, including dependencies, tests, and artifacts.
-  - **Output Artifact**: The build output, typically a ZIP file or directory containing the compiled code and other necessary files for deployment.
 
-  **Example `buildspec.yml`**:
-  ```yaml
-  version: 0.2
-
-  phases:
-    install:
-      commands:
-        - npm install
-    build:
-      commands:
-        - npm run build
-    post_build:
-      commands:
-        - echo Build completed
-
-  artifacts:
-    files:
-      - '**/*'
-    discard-paths: yes
+## Screenshots
 
 
-#### 3. Deploy
+### Home Page
+![alt text](./public/assets/home.png)
 
-- **Description**: The deploy stage takes the built artifacts and deploys them to the specified environment (e.g., EC2 instances).
-- **Action Provider**: AWS CodeDeploy.
+### Registration Page
+![alt text](./public/assets/image.png)
+
+### SignIn Page
+![alt text](./public/assets/signin.png)
+
+### Favourite Page (My List)
+![alt text](./public/assets/favourite.png)

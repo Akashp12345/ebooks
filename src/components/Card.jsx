@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Skeleton, message, Typography } from "antd";
 import { isAuthenticated } from "../utils/auth";
 import { useDispatch } from "react-redux";
@@ -8,12 +8,15 @@ import { jwtDecode } from "jwt-decode";
 // icons
 import { FaRegHeart, FaHeart, FaCheck } from "react-icons/fa";
 import { IoCheckmarkDoneOutline } from "react-icons/io5";
+import {LoadingOutlined} from "@ant-design/icons"
 // Styles
 import "./styles/card.css";
 const { Text } = Typography;
 
 const Card = ({ loading, booksdata, fetcher }) => {
   const dispatch = useDispatch();
+  const [sendrequest,setSendRequest]=useState(false)
+
   let decode = "";
   if (sessionStorage.getItem("token")) {
     let token = sessionStorage.getItem("token");
@@ -28,9 +31,12 @@ const Card = ({ loading, booksdata, fetcher }) => {
         dispatch(enableLogin(true));
         return;
       }
+      setSendRequest(true)
       await postrequest(`/api/v1/books/favourite/${decode?.userid}`, book);
       fetcher();
+      setSendRequest(false)
     } catch (err) {
+      setSendRequest(false)
       console.log(err.message);
     }
   };
@@ -43,11 +49,13 @@ const Card = ({ loading, booksdata, fetcher }) => {
         dispatch(enableLogin(true));
         return;
       }
-
+      setSendRequest(true)
       await postrequest(`/api/v1/books/markasread/${decode?.userid}`, book);
       fetcher();
-      message.success({});
+      setSendRequest((prev)=>!prev)
     } catch (err) {
+      setSendRequest(false)
+      
       console.log(err.message);
     }
   };
@@ -117,11 +125,13 @@ const Card = ({ loading, booksdata, fetcher }) => {
               {/* Add to favourite and mark as read button */}
               <div className="card-button">
                 <span>
-                  {!book?.favourite ? (
+  {sendrequest ?<LoadingOutlined/>:
+                  !book?.favourite ? (
                     <FaRegHeart
                       title="Add to Favourite"
                       size={20}
                       onClick={() => AddToFavourite(book)}
+                      
                     />
                   ) : (
                     <FaHeart
@@ -134,7 +144,7 @@ const Card = ({ loading, booksdata, fetcher }) => {
                 </span>
                 |
                 <span>
-                  {book?.readstatus ? (
+                  {sendrequest?<LoadingOutlined/>:book?.readstatus ? (
                     <IoCheckmarkDoneOutline
                       color="green"
                       size={20}
