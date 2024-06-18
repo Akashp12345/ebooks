@@ -11,4 +11,4 @@ cd $APP_DIR
 git pull origin $BRANCH
 
 # Install dependencies
-sudo service nginx restartgit 
+sudo service nginx restart
